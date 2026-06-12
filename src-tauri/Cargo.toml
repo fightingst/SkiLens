@@ -1,0 +1,42 @@
+[package]
+name = "skilens"
+version = "0.1.0"
+description = "SkiLens macOS skill usage dashboard"
+authors = ["SkiLens"]
+edition = "2021"
+
+[lib]
+name = "skilens_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+skilens-core = { path = "core" }
+chrono = { version = "0.4", features = ["serde"] }
+dirs = "6"
+notify = { version = "8", default-features = false, features = ["macos_fsevent"] }
+r2d2 = "0.8"
+r2d2_sqlite = "0.27"
+rusqlite = { version = "0.34", features = ["bundled", "chrono"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tauri = { version = "2", features = ["macos-private-api"] }
+tauri-plugin-dialog = "2"
+tauri-plugin-fs = "2"
+tauri-plugin-log = "2"
+tauri-plugin-opener = "2"
+tauri-plugin-store = "2"
+tauri-plugin-window-state = "2"
+thiserror = "2"
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+tracing = "0.1"
+walkdir = "2"
+
+[features]
+default = ["custom-protocol"]
+custom-protocol = ["tauri/custom-protocol"]
+
+[dev-dependencies]
+tempfile = "3"
