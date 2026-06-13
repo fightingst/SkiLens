@@ -9,14 +9,14 @@ const WEEKDAY_NAMES = ['日', '一', '二', '三', '四', '五', '六'];
 const INVOCATION_SIGNALS = new Set(['slash-command', 'skill-tool']);
 
 export const CATEGORIES: Record<SkillCategory, { label: string; color: string; icon: string }> = {
-  lark: { label: '飞书 / Lark', color: '#00B8A9', icon: '◈' },
-  design: { label: '设计 Design', color: '#FF6B9D', icon: '◐' },
+  office: { label: '办公协作', color: '#00B8A9', icon: '◈' },
+  design: { label: '设计视觉', color: '#FF6B9D', icon: '◐' },
   writing: { label: '内容写作', color: '#AF52DE', icon: '✎' },
   eng: { label: '开发工程', color: '#007AFF', icon: '⌘' },
   auto: { label: '自动化', color: '#FF9500', icon: '⚡' },
-  search: { label: '搜索 / 数据', color: '#34C759', icon: '◉' },
-  tools: { label: '工具 / 管理', color: '#5856D6', icon: '◇' },
-  testing: { label: '测试 / 评测', color: '#FF3B30', icon: '◎' },
+  search: { label: '搜索数据', color: '#34C759', icon: '◉' },
+  tools: { label: '工具管理', color: '#5856D6', icon: '◇' },
+  testing: { label: '测试评测', color: '#FF3B30', icon: '◎' },
   other: { label: '其他', color: '#8E8E93', icon: '○' },
 };
 
@@ -63,12 +63,12 @@ function sourceText(skill: SkillPayload): string {
 export function classifySkill(skill: SkillPayload): SkillCategory {
   const name = skill.name.toLowerCase();
   const text = `${name} ${skill.description || ''} ${sourceText(skill)}`.toLowerCase();
-  if (/^(lark-|feishu\b)|飞书|lark/.test(text)) return 'lark';
-  if (/image|design|cover|infographic|illustrator|xhs|视觉|图片|设计|whiteboard|diagram|draw/.test(text)) return 'design';
-  if (/writing|writer|humanizer|markdown|article|content|translate|写作|润色|文本|文章|翻译/.test(text)) return 'writing';
+  if (/feishu|lark|slack|notion|obsidian|calendar|meeting|docs?|wiki|base|drive|sheet|spreadsheet|presentation|permission|workspace|飞书|文档|知识库|云盘|多维表格|表格|会议|日历|权限|协作|办公/.test(text)) return 'office';
+  if (/image|design|cover|infographic|illustrator|figma|canvas|poster|xhs|视觉|图片|图像|设计|白板|海报|封面|配图|diagram|draw/.test(text)) return 'design';
+  if (/writing|writer|humanizer|markdown|article|content|translate|copywriting|blog|newsletter|wechat|写作|润色|文本|文章|翻译|公众号|小红书|文案|摘要/.test(text)) return 'writing';
   if (/java|dev|code|mr-|review|engineering|architecture|tdd|workflow|git|repo|test-browser|coding|开发|代码|架构|规范/.test(text)) return 'eng';
-  if (/browser|chrome|computer|desktop|automation|playwright|agent|event|calendar|task|自动化/.test(text)) return 'auto';
-  if (/search|mysql|data|graph|ocr|extract|research|web|wechat|数据库|搜索|数据|提取|知识图谱/.test(text)) return 'search';
+  if (/browser|chrome|computer|desktop|automation|playwright|agent|event|task|自动化|浏览器|桌面|任务/.test(text)) return 'auto';
+  if (/search|mysql|postgres|database|sql|data|graph|ocr|extract|research|web|crawler|scrape|数据库|搜索|数据|提取|知识图谱|检索|爬取|调研/.test(text)) return 'search';
   if (/eval|test|benchmark|mimo|harness|评测|测试/.test(text)) return 'testing';
   if (/skill|plugin|install|creator|workflow|setup|tool|管理|安装/.test(text)) return 'tools';
   return 'other';

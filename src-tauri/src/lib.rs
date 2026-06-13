@@ -51,6 +51,12 @@ struct DeletePayload {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+struct RescanPayload {
+    #[serde(rename = "generatedAt")]
+    generated_at: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
 struct RevealPayload {
     path: String,
 }
@@ -62,13 +68,25 @@ struct MoveEntry {
 }
 
 #[tauri::command]
-fn get_dashboard_data(state: State<AppState>) -> Result<SummaryPayload, String> {
-    load_latest_payload(&state.data_dir).or_else(|_| rescan_inner(&state))
+async fn get_dashboard_data(state: State<'_, AppState>) -> Result<SummaryPayload, String> {
+    if let Ok(payload) = load_latest_payload(&state.data_dir) {
+        return Ok(payload);
+    }
+    let state = state.inner().clone();
+    tauri::async_runtime::spawn_blocking(move || rescan_inner(&state))
+        .await
+        .map_err(|error| error.to_string())?
 }
 
 #[tauri::command]
-fn rescan(state: State<AppState>) -> Result<SummaryPayload, String> {
-    rescan_inner(&state)
+async fn rescan(state: State<'_, AppState>) -> Result<RescanPayload, String> {
+    let state = state.inner().clone();
+    let payload = tauri::async_runtime::spawn_blocking(move || rescan_inner(&state))
+        .await
+        .map_err(|error| error.to_string())??;
+    Ok(RescanPayload {
+        generated_at: payload.generated_at,
+    })
 }
 
 #[tauri::command]

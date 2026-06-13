@@ -1,6 +1,10 @@
 import { invoke } from '@tauri-apps/api/core';
 import type { ArchivePayload, SkillMdPayload, SummaryPayload } from '../types';
 
+type RescanPayload = {
+  generatedAt: string;
+};
+
 const browserArchiveState = new Set<string>();
 
 function hasTauriIpc(): boolean {
@@ -23,8 +27,8 @@ export function getDashboardData(): Promise<SummaryPayload> {
   return invoke('get_dashboard_data');
 }
 
-export function rescan(): Promise<SummaryPayload> {
-  if (!hasTauriIpc()) return Promise.resolve(emptySummary());
+export function rescan(): Promise<RescanPayload> {
+  if (!hasTauriIpc()) return Promise.resolve({ generatedAt: '' });
   return invoke('rescan');
 }
 

@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  check:
+    name: 构建和测试
+    runs-on: macos-latest
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: 设置 Rust
+        uses: dtolnay/rust-toolchain@29eef336d9b2848a0b548edc03f92a220660cdb8
+
+      - name: 安装前端依赖
+        run: npm ci
+
+      - name: 构建前端
+        run: npm run build
+
+      - name: 测试 Tauri crate
+        run: cargo test --manifest-path src-tauri/Cargo.toml
+
+      - name: 测试扫描器 core
+        run: cargo test --manifest-path src-tauri/core/Cargo.toml

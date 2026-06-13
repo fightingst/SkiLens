@@ -1,6 +1,6 @@
 [package]
 name = "skilens"
-version = "0.1.0"
+version = "0.0.1"
 description = "SkiLens macOS skill usage dashboard"
 authors = ["SkiLens"]
 edition = "2021"

@@ -1,6 +1,6 @@
 export type TimeRange = '今天' | '7天' | '30天' | '全部';
-export type SkillCategory = 'lark' | 'design' | 'writing' | 'eng' | 'auto' | 'search' | 'tools' | 'testing' | 'other';
-export type ViewKey = 'overview' | 'category' | 'coldstart' | 'detail';
+export type SkillCategory = 'office' | 'design' | 'writing' | 'eng' | 'auto' | 'search' | 'tools' | 'testing' | 'other';
+export type ViewKey = 'overview' | 'category' | 'coldstart' | 'detail' | 'list';
 
 export interface SkillSource {
   path: string;
