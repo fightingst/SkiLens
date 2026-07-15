@@ -24,3 +24,4 @@ pnpm-debug.log*
 *.mobileprovision
 usage-data.js
 skill-usage-data.json
+.mifi-worktrees
